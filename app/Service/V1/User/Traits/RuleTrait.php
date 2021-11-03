@@ -19,12 +19,19 @@ trait RuleTrait
     public function rules($id = null)
     {
         return [
-            'name' => 'required|string|max:255',
-            'is_active' => 'required|boolean|max:1',
-            'password' => 'required|string|max:255',
             'user_type_id' => 'required|integer|max:255',
+            'user_enterprise_id' => 'required|integer|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|max:255|unique:users,email' . ($id == null ? '' : ',' . $id),
-            'cpf_cnpj' => 'required|string|max:255|unique:users,cpf_cnpj' . ($id == null ? '' : ',' . $id),            
+            'password' => 'required|string|max:255', 
+            'is_active' => 'required|boolean|max:1', 
+        ];
+    }
+
+    public function ruleDocument($id = null) {
+        return [
+            'document' => 'required|string|max:255|unique:user_docs,document' . ($id == null ? '' : ',' . $id),
+
         ];
     }
     

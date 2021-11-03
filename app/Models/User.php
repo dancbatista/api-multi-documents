@@ -18,10 +18,12 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'cpf_cnpj', 'user_type_id', 'is_active'
+        'name', 'email', 'password', 'user_type_id', 'user_doc_id', 'user_enterprise_id','is_active'
     ];
     protected $visible = [
-        'id', 'name', 'email', 'password', 'cpf_cnpj', 'user_type_id', 'is_active', 'wallet'
+        'id', 'name', 'email', 'password','user_type_id', 
+        'user_doc_id', 'user_enterprise_id', 'is_active',
+        'userType', 'enterprise', 'userDoc'
     ];
 
     /**
@@ -63,5 +65,17 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function userType() {
+        return $this->hasOne(UserType::class, 'id', 'user_type_id');
+    }
+
+    public function enterprise() {
+        return $this->hasOne(Enterprise::class, 'id', 'user_enterprise_id');
+    }
+
+    public function userDoc() {
+        return $this->hasOne(UserDoc::class, 'id', 'user_doc_id');
+    }
 
 }

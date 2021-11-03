@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class CreateUserTypesTable extends Migration
+class CreateTableDocumentTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -15,15 +15,16 @@ class CreateUserTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_types', function (Blueprint $table) {
+        Schema::create('document_types', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->unique();
             $table->timestamps();
         });
-        DB::table('user_types')->insert([
-            ['name' => 'Administrador', 'created_at' => Carbon::now()],
-            ['name' => 'Gerente', 'created_at' => Carbon::now()],
-            ['name' => 'Usuario', 'created_at' => Carbon::now()]
+
+        DB::table('document_types')->insert([
+            ['name' => 'cpf', 'created_at' => Carbon::now()],
+            ['name' => 'cnpj', 'created_at' => Carbon::now()],
+            ['name' => 'cfp', 'created_at' => Carbon::now()]
         ]);
     }
 
@@ -34,6 +35,6 @@ class CreateUserTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_types');
+        Schema::dropIfExists('document_types');
     }
 }

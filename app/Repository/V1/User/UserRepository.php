@@ -20,7 +20,10 @@ class UserRepository extends BaseRepository
         try {
             $user = $this->obj->create($attributes);
             DB::commit();
-            return $user;
+            return $user
+                        ->with(['userType', 'enterprise', 'userDoc', 'userDoc.userDocumentType'])
+                        ->where('id', $user->id)
+                        ->first();
         } catch (Exception $ex) {
             DB::rollback();
             return $ex->getMessage();
@@ -33,13 +36,16 @@ class UserRepository extends BaseRepository
         try {
             $user = $this->obj->find($id);
             if ($user) {
-                $user->updateOrCreate([
+                $user = $user->updateOrCreate([
                     'id' => $id,
                         ], $attributes);
             }
 
             DB::commit();
-            return (object) $user;
+            return (object) $user
+                        ->with(['userType', 'enterprise', 'userDoc', 'userDoc.userDocumentType'])
+                        ->where('id', $user->id)
+                        ->first();
         } catch (Exception $ex) {
             DB::rollback();
             return $ex->getMessage();
@@ -54,6 +60,7 @@ class UserRepository extends BaseRepository
     public function show(int $id): object
     {
         return (object) $this->obj
+                        ->with(['userType', 'enterprise', 'userDoc', 'userDoc.userDocumentType'])
                         ->where('id', $id)
                         ->first();
     }

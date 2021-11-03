@@ -3,10 +3,19 @@
 namespace Tests\Unit\Services;
 
 use App\Service\V1\User\UserServiceRegistration;
+
 use App\Repository\V1\User\UserRepository;
 use App\Repository\V1\UserType\UserTypeRepository;
+use App\Repository\V1\Document\UserDocumentRepository;
+use App\Repository\V1\Enterprise\EnterpriseRepository;
+use App\Repository\V1\Document\DocumentTypeRepository;
+
+
 use App\Models\User;
 use App\Models\UserType;
+use App\Models\UserDoc;
+use App\Models\Enterprise;
+use App\Models\DocumentType;
 use Tests\TestCase;
 class UserTest extends TestCase {
 
@@ -20,22 +29,27 @@ class UserTest extends TestCase {
 
     function test_create() {
         $attributes = [
-            "name" => "Carlos",
-            "email" => "carlos@gmail.com",
-            "password" => "12345",
-            "cpf_cnpj" => '22895159068',
-            "user_type_id" => 2,
-            "is_active" => 1,
+        'user_type_id' => 1,
+        'document' => (string) rand(174829237, 95474583292842),
+        'user_enterprise_id' => 1,
+        'name' => 'Daniel Batista',
+        'email' => 'dancbatista@gmail.com',
+        'password' => bcrypt(123456),   
+        'document_type_id' => 2,
+        'is_active' => 1,
         ];
         
 
-       $UserRepository = new UserRepository(new User());
-       $userTypeRepository = new UserTypeRepository(new UserType());
+        $userRepository = new UserRepository(new User());
+        $userTypeRepository = new UserTypeRepository(new UserType());
+        $userDocumentRepository = new UserDocumentRepository(new UserDoc());
+        $enterpriseRepository = new EnterpriseRepository(new Enterprise());
+        $documentTypeRepository = new DocumentTypeRepository(new DocumentType());
        $userRepository = new UserServiceRegistration(
-               $UserRepository, $userTypeRepository
+               $userRepository, $userTypeRepository, $userDocumentRepository, $enterpriseRepository, $documentTypeRepository 
        );
        $user = $userRepository->store($attributes);        
-        if (is_object($user)) {            
+        if (is_object($user)) {           
             $expceted = User::find($user->id);            
             $this->assertEquals($expceted->id, $user->id);            
         } else {

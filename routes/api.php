@@ -21,8 +21,8 @@ Route::group(['middleware' => ['apiJwt', 'checkUserType'], 'prefix' => 'auth',],
 
     //User
     Route::middleware(['checkUser'])->group(function () {
-        Route::post('user-update/{id}', 'V1\\UserController@update');
-        Route::get('user-show/{id}', 'V1\\UserController@show');
+        Route::post('user/{id}', 'V1\\UserController@update');
+        Route::get('user/{id}', 'V1\\UserController@show');
     });
 
     //User Type
@@ -37,7 +37,10 @@ Route::group(['middleware' => ['apiJwt', 'checkUserType'], 'prefix' => 'auth',],
 });
 
 Route::group(['prefix' => ''], function ($router) {
-    Route::post('register-user', 'V1\\UserController@store');
+    Route::post('user', 'V1\\UserController@store');
     Route::post('login', 'V1\\AuthController@login');
-    Route::get('example-weather/{id}', 'V1\\ExampleWeatherCotroller@show');
+    Route::post('enterprise', 'V1\\EnterpriseController@store');
+    Route::get('enterprise', 'V1\\EnterpriseController@index');
+    Route::get('enterprise/{id}', 'V1\\EnterpriseController@show');
+    Route::post('enterprise/{id}', 'V1\\EnterpriseController@update');
 });
