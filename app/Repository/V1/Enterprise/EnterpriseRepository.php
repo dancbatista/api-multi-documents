@@ -47,18 +47,17 @@ class EnterpriseRepository extends BaseRepository
 
     public function show(int $id): object
     {
-
         return (object) $this->obj->where('id', $id)->first();
     }
 
     public function all($searchQuery = null): object
     {
-        if ($searchQuery) {
-            return $this->obj
-                            ->where('name', 'ilike', '%' . $searchQuery . '%')
-                            ->get();
+        if ($this->isManager()) {
+            return $this->obj->where('id', auth('api')->user()->user_enterprise_id)->first();
         }
         return $this->obj->all();
     }
-
+    public function isManager() {
+        return auth('api')->user()->user_type_id == 2;
+    }
 }

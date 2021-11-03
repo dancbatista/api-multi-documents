@@ -17,7 +17,7 @@ Route::get('/', function () {
     echo "api rodando";
 });
 
-Route::group(['middleware' => ['apiJwt', 'checkUserType'], 'prefix' => 'auth',], function ($router) {
+Route::group(['middleware' => ['apiJwt', 'is_checkUser'], 'prefix' => 'auth',], function ($router) {
 
     //User
     Route::middleware(['checkUser'])->group(function () {
@@ -34,13 +34,16 @@ Route::group(['middleware' => ['apiJwt', 'checkUserType'], 'prefix' => 'auth',],
         Route::get('user-type', 'V1\\UserTypeController@index');
 
     });
+    //Enterprise 
+    Route::middleware(['permission'])->group(function () {
+        Route::get('enterprise', 'V1\\EnterpriseController@index');
+        Route::get('enterprise/{id}', 'V1\\EnterpriseController@show');
+        Route::post('enterprise/{id}', 'V1\\EnterpriseController@update');
+    });
 });
 
 Route::group(['prefix' => ''], function ($router) {
     Route::post('user', 'V1\\UserController@store');
     Route::post('login', 'V1\\AuthController@login');
     Route::post('enterprise', 'V1\\EnterpriseController@store');
-    Route::get('enterprise', 'V1\\EnterpriseController@index');
-    Route::get('enterprise/{id}', 'V1\\EnterpriseController@show');
-    Route::post('enterprise/{id}', 'V1\\EnterpriseController@update');
 });

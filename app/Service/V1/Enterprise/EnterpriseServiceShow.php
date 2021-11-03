@@ -17,7 +17,12 @@ class EnterpriseServiceShow{
     }
 
     public function enterpriseShow(int $id) {
-
+        
+        if (auth('api')->user()->user_enterprise_id == 2) {
+            if (auth('api')->user()->user_enterprise_id != $id) {
+                return 'Os gerentes tem acesso apenas as informações de sua própria empresa';
+            }
+        }
          return $this->enterpriseRepository->show($id);
     }
 }

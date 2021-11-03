@@ -13,4 +13,5 @@ class Enterprise extends Model
     protected $visible = [
         'id', 'name'
     ];
+
 }
